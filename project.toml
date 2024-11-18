@@ -1,0 +1,25 @@
+[project]
+name = "processor-ci-communication_JN513"
+version = "0.0.1"
+authors = [
+  { name="Julio Nunes Avelar", email="julio.avelar@students.ic.unicamp.br" },
+]
+description = "Processor CI Communication Interface"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Linux",
+]
+
+[project.urls]
+Homepage = "https://github.com/LSC-Unicamp/processor_ci_communication"
+Issues = "https://github.com/LSC-Unicamp/processor_ci_communication/issues"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = { include = ["core", "core.*"] }  # Inclui 'core' e seus subpacotes
