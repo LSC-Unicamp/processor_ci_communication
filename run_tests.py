@@ -1,27 +1,33 @@
+"""
+This script discovers and runs all unit tests in the specified directory, 
+then generates XML reports for each test case. The results are saved in the 
+'./test-reports' directory with a unique filename based on the test case and timestamp.
+"""
+
 import os
 import time
 import unittest
 import xmlrunner
 
-if __name__ == "__main__":
-    # Diretório onde os testes estão localizados
-    test_dir = "/eda/processor-ci-communication/tests"
+if __name__ == '__main__':
+    # Directory where the tests are located
+    TEST_DIR = '/eda/processor-ci-communication/tests'
 
-    # Descobrir todos os testes dentro do diretório
-    test_suites = unittest.defaultTestLoader.discover(test_dir, pattern="*.py")
+    # Discover all test files within the directory
+    test_suites = unittest.defaultTestLoader.discover(TEST_DIR, pattern='*.py')
 
-    # Criar a pasta para os relatórios XML, se não existir
-    os.makedirs("test-reports", exist_ok=True)
+    # Create the test reports directory if it does not exist
+    os.makedirs('test-reports', exist_ok=True)
 
-    # Iterar sobre cada arquivo de teste
+    # Iterate over each test suite
     for test_suite in test_suites:
-        # Para cada suite de teste, percorra os casos de teste
+        # For each suite of tests, iterate over the test cases
         for test_case in test_suite:
-            # Gera um nome de arquivo único com base no nome da suite e no timestamp
+            # Generate a unique file name based on the test case name and timestamp
             test_case_name = test_case.__class__.__name__
-            timestamp = str(int(time.time()))
-            report_file = f"test-reports/results_{test_case_name}_{timestamp}.xml"
+            TIMESTAMP = str(int(time.time()))
+            REPORT_FILE = f'test-reports/results_{test_case_name}_{TIMESTAMP}.xml'
 
-            # Executar os testes e salvar os resultados em arquivos separados
-            with open(report_file, "w") as output:
+            # Run the tests and save the results in separate files
+            with open(REPORT_FILE, 'w', encoding='utf-8') as output:
                 xmlrunner.XMLTestRunner(output=output).run(test_case)
