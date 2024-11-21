@@ -43,16 +43,6 @@ def main():
         default=1,
     )
     parser.add_argument(
-        '-T',
-        '--test_program',
-        help='Test program to be loaded onto the controller',
-    )
-    parser.add_argument(
-        '-d',
-        '--test_directory',
-        help='Directory containing test programs to be loaded onto the controller',
-    )
-    parser.add_argument(
         '-s',
         '--shell',
         help='Starts a shell for communication with the controller',
@@ -65,6 +55,11 @@ def main():
             args.port, args.baudrate, args.timeout
         )
         shell.cmdloop()
+
+    else:
+        print('Shell not started')
+        # print help message:
+        print('To start the shell, use the -s or --shell flag')
 
 
 if __name__ == '__main__':

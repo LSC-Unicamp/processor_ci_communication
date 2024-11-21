@@ -11,8 +11,8 @@ Thank you for considering contributing to the project! We’re happy to welcome 
    Clone your forked repository to your local development environment.  
 
    ```bash  
-   git clone https://github.com/YOUR_USERNAME/processor-ci.git  
-   cd processor-ci  
+   git clone https://github.com/YOUR_USERNAME/processor_ci_communication.git  
+   cd processor_ci_communication
    ```  
 
 3. **Create a Branch**  
@@ -73,7 +73,7 @@ Thank you for considering contributing to the project! We’re happy to welcome 
   ```  
 - **Pylint**:  
   ```bash  
-  pylint $(git ls-files '*.py' ':!utils/*') --max-locals=30 --disable=duplicate-code,import-error  
+  pylint $(git ls-files '*.py') --max-public-methods=30 --disable=duplicate-code,import-error 
   ```  
 
 ## Communication  
@@ -83,4 +83,4 @@ Thank you for considering contributing to the project! We’re happy to welcome 
 
 ## License  
 
-By contributing to this project, you agree that your contributions will be licensed under the same license as the project. See the [license](https://github.com/LSC-Unicamp/processor-ci/blob/main/LICENSE) for details.  
+By contributing to this project, you agree that your contributions will be licensed under the same license as the project. See the [license](https://github.com/LSC-Unicamp/processor_ci_communication/blob/main/LICENSE) for details.  
