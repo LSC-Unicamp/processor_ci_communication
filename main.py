@@ -1,9 +1,9 @@
 """
 This module handles the setup and execution of the communication interface with the controller.
 
-It parses command-line arguments to configure communication parameters (port, baudrate, timeout) and 
-optionally starts an interactive shell for communication with the controller. 
-Additionally, it supports loading test programs and directories containing test 
+It parses command-line arguments to configure communication parameters (port, baudrate, timeout) and
+optionally starts an interactive shell for communication with the controller.
+Additionally, it supports loading test programs and directories containing test
 programs onto the controller.
 
 Functions:
@@ -15,7 +15,7 @@ from core.shell import ProcessorCIInterfaceShell
 
 
 def main():
-    """Main function that parses command-line arguments and starts a shell for 
+    """Main function that parses command-line arguments and starts a shell for
         communication with the controller.
 
     This function processes various command-line arguments to:
