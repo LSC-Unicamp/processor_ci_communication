@@ -53,13 +53,15 @@ class ProcessorCIInterface:
         """
         return self.serial.read(size)
 
-    def print_data(self, data: bytes) -> None:
+    def print_data(self, data: int) -> None:
         """
         Prints the received data in hexadecimal format.
 
         Args:
-            data (bytes): Data to be printed.
+            data (int): Data to be printed.
         """
+        data = data.to_bytes(4, 'big')
+
         for byte in data:
             print(f'{byte:02x}', end='')
         print()

@@ -27,6 +27,8 @@ class ProcessorCIInterfaceShell(cmd.Cmd, ProcessorCIInterface):
     such as clock control, memory read and write, accumulator manipulation, and more.
     """
 
+    prompt = 'ProcessorCIInterface> '
+
     def __init__(self, port: str, baudrate: int, timeout: int = 1) -> None:
         """
         Initializes the communication interface with the processor and the interactive shell.

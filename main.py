@@ -35,12 +35,14 @@ def main():
         '--baudrate',
         help='Baud rate for communication with the controller',
         default=115200,
+        type=int,
     )
     parser.add_argument(
         '-t',
         '--timeout',
         help='Timeout for communication with the controller',
         default=1,
+        type=int,
     )
     parser.add_argument(
         '-s',
@@ -52,7 +54,7 @@ def main():
 
     if args.shell:
         shell = ProcessorCIInterfaceShell(
-            args.port, args.baudrate, args.timeout
+            args.port, args.baudrate, int(args.timeout)
         )
         shell.cmdloop()
 
