@@ -60,8 +60,6 @@ class ProcessorCIInterface:
         Args:
             data (int): Data to be printed.
         """
-        data = data.to_bytes(4, 'big')
-
         for byte in data:
             print(f'{byte:02x}', end='')
         print()
@@ -149,7 +147,7 @@ class ProcessorCIInterface:
         self._send_command(0x57, address)
         self.send_rawdata(value)
 
-    def read_memory(self, address: int, second_memory: bool = False) -> int:
+    def read_memory(self, address: int, second_memory: bool = False) -> bytes:
         """
         Reads a value from the processor's memory.
 
@@ -162,10 +160,10 @@ class ProcessorCIInterface:
         """
         address = address >> 2
         if second_memory:
-            address = address | 0x80000000
+            address = address & 0xFFFFFF
+            address = address | 0x800000
         self._send_command(0x4C, address)
-        data = self.read_data()
-        return int.from_bytes(data, 'big')
+        return self.read_data()
 
     def load_msb_accumulator(self, value: int) -> None:
         """
