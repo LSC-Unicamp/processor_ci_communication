@@ -143,7 +143,7 @@ class ProcessorCIInterface:
         """
         address = address >> 2
         if second_memory:
-            address = address | 0x80000000
+            address = address | 0x800000
         self._send_command(0x57, address)
         self.send_rawdata(value)
 
