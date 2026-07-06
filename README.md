@@ -1,110 +1,91 @@
 # ProcessorCI Communication
 
-[![Pylint](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/pylint.yml/badge.svg)](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/pylint.yml)  
-[![Python Code Format Check](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/blue.yml/badge.svg)](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/blue.yml)  
+[![Pylint](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/pylint.yml/badge.svg)](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/pylint.yml)
+[![Python Code Format Check](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/blue.yml/badge.svg)](https://github.com/LSC-Unicamp/processor_ci_communication/actions/workflows/blue.yml)
 
-- **Não fala Inglês? [clique aqui](./README.pt.md)**
+- **Nao fala Ingles? [clique aqui](./README.pt.md)**
 
-Welcome to ProcessorCI!
+ProcessorCI Communication provides the host-side Python tools used to communicate with ProcessorCI hardware over the project protocol. The repository also includes the required/reference FPGA controller implementation under `protocol/hardware`, because protocol changes must be developed together with the hardware that interprets them.
 
-**ProcessorCI** is a project aimed at modernizing the processor verification process by integrating well-established verification techniques, continuous integration, and FPGA usage.
+## Repository Layout
 
-## About this module
-
-This repository provides scripts and tools to facilitate communication between the components involved in ProcessorCI (Hardware and Software), enabling control, command execution, and integration with different protocols.
+```text
+.
+├── core/                 # Python communication API and interactive shell helpers
+├── docs/                 # Unified communication and protocol documentation
+├── protocol/hardware/    # FPGA controller HDL, board targets, examples, and testbenches
+├── main.py               # CLI entrypoint
+└── requirements.txt      # Python runtime/development dependencies
+```
 
 ## Installation
 
-1. **Clone the repository**  
-Clone the repository to your local development environment.
-
 ```bash
-git clone https://github.com/LSC-Unicamp/processor_ci_communication.git  
-cd processor_ci_communication  
-```
-
-2. **Set up a virtual environment and install dependencies**  
-
-```bash
+git clone https://github.com/LSC-Unicamp/processor_ci_communication.git
+cd processor_ci_communication
 python3 -m venv env
 . env/bin/activate
 pip install -r requirements.txt
 ```
 
-**Note**: Every time you use the project, you need to activate the virtual environment with:
+Every time you use the project, activate the virtual environment with:
 
 ```bash
 . env/bin/activate
 ```
 
-## Usage
+## Communication Shell
 
-### Operating modes  
-
-This module can be used in two main ways:  
-
-1. **Python API**: Importing the modules directly into your Python project.  
-2. **Interactive Shell**: Using the integrated shell for direct communication with the hardware infrastructure.  
-
-### Starting the Shell  
-
-To start the integrated shell:  
-
-```bash
-python3 main.py -s -p PORT
-```
-
-**Example:**  
+Start the interactive shell with:
 
 ```bash
 python3 main.py -s -p /dev/ttyUSB0
 ```
 
-## ProcessorCI Shell  
+Useful flags:
 
-The integrated shell allows direct interaction with the hardware infrastructure. Through it, you can execute the commands defined by the [ProcessorCI Interface](https://lsc-unicamp.github.io/processor-ci-controller/instructions/).  
+- `-s`, `--shell`: starts the integrated shell.
+- `-p`, `--port`: communication port, for example `/dev/ttyUSB0`.
+- `-b`, `--baudrate`: serial baud rate. Defaults to `115200`.
+- `-t`, `--timeout`: serial timeout in seconds. Defaults to `1`.
 
-Additionally, it supports various configurations, such as:  
+The shell executes the protocol commands documented in `docs/protocol/instructions.md`.
 
-- **Serial Port**: Specify the communication port using `-p`.  
-- **Baudrate**: Customize the transmission speed using `-b`.  
-- **Communication Protocol**: The shell will soon support additional protocols like SPI and PCIe.  
+## Protocol Hardware
 
-**Example usage:**  
+The FPGA controller that receives and interprets the communication protocol lives in `protocol/hardware`. Its sources include:
 
-```bash
-python3 main.py -s -p /dev/ttyUSB0 -b 115200 -t 2
-```
+- `rtl/`: controller, interpreter, memory, clock, reset, timer, and bus adapters.
+- `modules/`: communication modules and optional submodule integrations.
+- `fpga/`: board-specific build projects and pin constraints.
+- `testbenchs/`: HDL testbenches for protocol hardware components.
 
-> In the example above:
-> - `-p`: Specifies the serial port `/dev/ttyUSB0`.
-> - `-b`: Sets the baud rate to `115200`.
-> - `-t`: Sets the timeout to 2s.
-
-## Available Flags  
-
-Below are some useful flags for using the shell:  
-
-- **`-s`**: Starts the integrated shell.  
-- **`-p`**: Specifies the communication port (e.g., `/dev/ttyUSB0`).  
-- **`-b`**: Sets the baud rate (e.g., `115200`).  
-- **`-t`**: Sets the timeout (e.g., `1`).  
-
-**Full example:**  
+Initialize hardware submodules only when you need the optional hardware integrations:
 
 ```bash
-python3 main.py -s -p /dev/ttyUSB0 -b 115200 -t 1
+git submodule update --init --recursive
 ```
 
-## Questions and Suggestions  
+Run the self-contained hardware tests with:
 
-The official documentation is available at: [processorci.ic.unicamp.br](https://processorci.ic.unicamp.br/).  
-Questions and suggestions can be submitted in the GitHub Issues section. Contributions are welcome, and all Pull Requests will be reviewed and merged whenever possible.  
+```bash
+make -C protocol/hardware fifo
+make -C protocol/hardware clk_divider
+```
 
-## Contributing to the project  
+## Documentation
 
-**Contributions**: If you want to contribute improvements, check the [CONTRIBUTING.md](./CONTRIBUTING.md) file.  
+Install documentation dependencies and serve the unified docs site with:
 
-## License  
+```bash
+pip install -r docs/requirements.txt
+mkdocs serve
+```
 
-This project is licensed under the [MIT](./LICENSE) license, granting full freedom of use.  
+## Licenses
+
+This repository keeps license boundaries explicit:
+
+- Host communication software is licensed under MIT. See `LICENSE`.
+- Protocol hardware sources are licensed under CERN-OHL-P. See `protocol/hardware/LICENSE.CERN-OHL-P`.
+- Documentation is licensed under CC BY-SA 4.0. See `docs/LICENSE.CC-BY-SA-4.0.md`.
