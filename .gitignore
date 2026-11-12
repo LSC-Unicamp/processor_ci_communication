@@ -167,3 +167,22 @@ out/
 teste.py
 temp/
 arquivos.txt
+
+# HDL / FPGA build outputs
+protocol/hardware/build/
+protocol/hardware/**/impl/
+protocol/hardware/**/x.*
+protocol/hardware/**/*.fs
+protocol/hardware/**/*.jou
+protocol/hardware/**/*.log
+protocol/hardware/**/*.dcp
+protocol/hardware/**/*.rpt
+protocol/hardware/**/webtalk*.jou
+protocol/hardware/**/webtalk*.log
+protocol/hardware/**/usage_statistics_webtalk.*
+protocol/hardware/**/clockInfo.txt
+protocol/hardware/**/reports/
+protocol/hardware/**/slpp_all
+
+# Documentation build output
+site/

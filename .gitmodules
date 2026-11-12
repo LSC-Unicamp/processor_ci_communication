@@ -1,0 +1,9 @@
+[submodule "protocol/hardware/modules/SPI-Slave"]
+	path = protocol/hardware/modules/SPI-Slave
+	url = https://github.com/Unicamp-Odhin/SPI-Slave
+[submodule "protocol/hardware/modules/UART"]
+	path = protocol/hardware/modules/UART
+	url = https://github.com/ben-marshall/uart
+[submodule "protocol/hardware/modules/Grande-Risco-5"]
+	path = protocol/hardware/modules/Grande-Risco-5
+	url = https://github.com/JN513/Grande-Risco-5.git

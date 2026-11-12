@@ -27,7 +27,7 @@ setup(
     long_description_content_type='text/markdown',
     author='Julio Avelar',
     author_email='julio.avelar@students.ic.unicamp.br',
-    url='https://github.com/LSC-Unicamp/LSC-Unicamp/processor_ci_communication',  # Repository URL
+    url='https://github.com/LSC-Unicamp/processor_ci_communication',
     packages=find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',

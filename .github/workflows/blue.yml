@@ -29,4 +29,4 @@ jobs:
 
       - name: Run Blue format check
         run: |
-          blue --check .
+          blue --check main.py core

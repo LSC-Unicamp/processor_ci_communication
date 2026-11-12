@@ -1,0 +1,24 @@
+name: Protocol Hardware ClkDivider Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: sudo apt update && sudo apt install -y iverilog
+
+      - name: Run clock divider testbench
+        working-directory: protocol/hardware
+        run: make clk_divider
+
+      - name: Save waveform artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clk_divider_waveform
+          path: protocol/hardware/build/ClkDivider_tb.vcd

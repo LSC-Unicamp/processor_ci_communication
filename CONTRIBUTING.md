@@ -69,7 +69,7 @@ Thank you for considering contributing to the project! We’re happy to welcome 
 
 - **Blue**:  
   ```bash  
-  blue --check .  
+  blue --check main.py core
   ```  
 - **Pylint**:  
   ```bash  
@@ -83,4 +83,4 @@ Thank you for considering contributing to the project! We’re happy to welcome 
 
 ## License  
 
-By contributing to this project, you agree that your contributions will be licensed under the same license as the project. See the [license](https://github.com/LSC-Unicamp/processor_ci_communication/blob/main/LICENSE) for details.  
+By contributing to the communication software, you agree that your contributions will be licensed under MIT. Hardware contributions under `protocol/hardware` follow CERN-OHL-P, and documentation follows CC BY-SA 4.0.
