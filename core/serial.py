@@ -210,14 +210,14 @@ class ProcessorCIInterface:
         """
         self._send_command(0x73, value)
 
-    def read_accumulator(self) -> int:
+    def read_accumulator(self) -> bytes:
         """
         Reads the current value stored in the accumulator.
 
         Returns:
             int: Value of the accumulator.
         """
-        self._send_command(0x72, 0)
+        self._send_command(0x61, 0)
         return self.read_data()
 
     def set_timeout(self, timeout: int) -> None:
@@ -225,7 +225,7 @@ class ProcessorCIInterface:
         Sets the timeout duration for processor operations.
 
         Args:
-            timeout (int): Timeout value in seconds.
+            timeout (int): Maximum core execution cycles (24-bit command immediate).
         """
         self._send_command(0x54, timeout)
 
@@ -268,22 +268,22 @@ class ProcessorCIInterface:
 
         return self.read_data()
 
-    def get_module_id(self) -> int:
+    def get_module_id(self) -> bytes:
         """
         Retrieves the module ID of the connected processor.
 
         Returns:
-            int: Module ID as received from the processor.
+            bytes: Four raw bytes received from the processor.
         """
         self._send_command(0x70, 0)
         return self.read_data()
 
     def set_execution_end_address(self, address: int) -> None:
         """
-        Sets the end address for execution operations.
+        Sets the end address using a 24-bit word index.
 
         Args:
-            address (int): Address at which execution should stop.
+            address (int): Word index; the controller converts it to a byte address.
         """
         self._send_command(0x44, address)
 
@@ -305,7 +305,7 @@ class ProcessorCIInterface:
         for i in range(n):
             self.send_rawdata(data[i])
 
-    def read_from_accumulator(self, n: int) -> list[int]:
+    def read_from_accumulator(self, n: int) -> list[bytes]:
         """
         Reads multiple values from memory into the accumulator.
 
@@ -313,9 +313,9 @@ class ProcessorCIInterface:
             n (int): Number of values to read.
 
         Returns:
-            list[int]: List of data values read from memory.
+            list[bytes]: Four-byte big endian words read from memory.
         """
-        self._send_command(0x62, n)
+        self._send_command(0x4D, n)
         data = []
         for _ in range(n):
             data_line = self.read_data()
@@ -340,7 +340,8 @@ class ProcessorCIInterface:
         self._send_command(0x4F, 0)
 
     def execute_until_stop(
-        self, stop_address: int = -1, exec_timeout: int = -1
+        self, stop_address: int = -1, exec_timeout: int = -1,
+        host_timeout: float = 30.0,
     ) -> bytes:
         """
         Executes the processor until it stops, with optional stop address and timeout.
@@ -352,6 +353,8 @@ class ProcessorCIInterface:
         Returns:
             bytes: Data received after execution.
         """
+        if host_timeout <= 0:
+            raise ValueError('host_timeout must be positive seconds')
         if stop_address != -1:
             self.set_execution_end_address(
                 stop_address
@@ -361,10 +364,23 @@ class ProcessorCIInterface:
 
         self._send_command(0x75, 0)
 
-        while not self.data_available():
-            time.sleep(0.1)
-
-        return self.read_data(8)
+        deadline = time.monotonic() + host_timeout
+        response = bytearray()
+        while len(response) < 8:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError(f'FPGA execution response incomplete ({len(response)}/8 bytes)')
+            old_timeout = self.serial.timeout
+            try:
+                self.serial.timeout = min(remaining, old_timeout) if old_timeout is not None else remaining
+                part = self.read_data(8 - len(response))
+            finally:
+                self.serial.timeout = old_timeout
+            if part:
+                response.extend(part)
+            else:
+                time.sleep(min(0.01, remaining))
+        return bytes(response)
 
     def sync(self) -> bytes:
         """
